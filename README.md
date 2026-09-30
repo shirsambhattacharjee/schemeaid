@@ -109,50 +109,69 @@ The matching percentage is calculated from the number of passed rules.
 ## 📁 Project Structure
 
 ```text
-gov-scheme-assistant/
+schemeaid/
 │
 ├── client/
 │   ├── src/
 │   │   ├── components/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   └── ProtectedRoute.jsx
 │   │   ├── pages/
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── Schemes.jsx
+│   │   │   ├── SchemeDetail.jsx
+│   │   │   ├── EligibilityChecker.jsx
+│   │   │   ├── AIAssistant.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Signup.jsx
+│   │   │   └── Profile.jsx
 │   │   ├── services/
+│   │   │   ├── api.js
+│   │   │   └── firebase.js
 │   │   ├── context/
-│   │   └── App.jsx
-│   │
+│   │   │   └── AuthContext.jsx
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   └── index.css
 │   ├── public/
+│   ├── vite.config.js
 │   └── package.json
 │
 ├── server/
 │   ├── config/
 │   │   └── db.js
-│   │
 │   ├── controllers/
 │   │   ├── authController.js
 │   │   ├── eligibilityController.js
 │   │   └── schemeController.js
-│   │
 │   ├── models/
 │   │   └── Scheme.js
-│   │
 │   ├── routes/
 │   │   ├── authRoutes.js
 │   │   ├── eligibilityRoutes.js
 │   │   ├── schemeRoutes.js
 │   │   └── assistantRoutes.js
-│   │
 │   ├── services/
 │   │   └── eligibilityEngine.js
-│   │
 │   ├── scripts/
 │   │   ├── importSchemes.js
 │   │   └── generateRules.js
-│   │
 │   ├── data/
+│   │   └── schemesSeed.json
 │   ├── server.js
 │   └── package.json
 │
-├── README.md
-└── .gitignore
+├── screenshots/
+│   ├── dashboard.png
+│   ├── eligibility.png
+│   ├── schemes.png
+│   ├── ai-assistant.png
+│   ├── login.png
+│   └── profile.png
+│
+├── .gitignore
+└── README.md
 ```
 
 ## 🔄 Application Flow
@@ -402,21 +421,19 @@ Recommended screenshots:
 
 Example:
 
-```md
 ## 📸 Screenshots
 
-![Dashboard](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/dashboard.png)
+| **Dashboard** | **Eligibility Checker** |
+| :---: | :---: |
+| ![Dashboard](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/dashboard.png) | ![Eligibility Checker](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/eligibility.png) |
 
-![Eligibility Checker](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/eligibility.png)
+| **Schemes Discovery** | **AI Assistant** |
+| :---: | :---: |
+| ![Schemes](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/schemes.png) | ![AI Assistant](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/ai-assistant.png) |
 
-![Schemes](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/schemes.png)
-
-![AI Assistant](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/ai-assistant.png)
-
-![Login](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/login.png)
-
-![Profile](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/profile.png)
-```
+| **Login / Authentication** | **User Profile** |
+| :---: | :---: |
+| ![Login](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/login.png) | ![Profile](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/profile.png) |
 
 ## 🎯 Project Goals
 
