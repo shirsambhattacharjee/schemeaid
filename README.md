@@ -405,17 +405,17 @@ Example:
 ```md
 ## 📸 Screenshots
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/dashboard.png)
 
-![Eligibility Checker](screenshots/eligibility.png)
+![Eligibility Checker](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/eligibility.png)
 
-![Schemes](screenshots/schemes.png)
+![Schemes](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/schemes.png)
 
-![AI Assistant](screenshots/ai-assistant.png)
+![AI Assistant](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/ai-assistant.png)
 
-![Login](screenshots/login.png)
+![Login](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/login.png)
 
-![Profile](screenshots/profile.png)
+![Profile](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/profile.png)
 ```
 
 ## 🎯 Project Goals
