@@ -406,22 +406,22 @@ Example:
 ## 📸 Screenshots
 
 ### Dashboard
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](./screenshots/dashboard.png)
 
 ### Eligibility Checker
-![Eligibility Checker](screenshots/eligibility.png)
+![Eligibility Checker](./screenshots/eligibility.png)
 
 ### Schemes
-![Scheme Results](screenshots/schemes.png)
+![Scheme Results](./screenshots/schemes.png)
 
 ### AI Assistant
-![AI Assistant](screenshots/ai-assistant.png)
+![AI Assistant](./screenshots/ai-assistant.png)
 
 ### Login
-![AI Assistant](screenshots/login.png)
+![Login](./screenshots/login.png)
 
 ### Profile
-![AI Assistant](screenshots/profile.png)
+![Profile](./screenshots/profile.png)
 ```
 
 ## 🎯 Project Goals
