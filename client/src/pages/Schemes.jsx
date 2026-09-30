@@ -8,9 +8,9 @@ import {
   X,
 } from "lucide-react";
 
-const API =
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:5000";
+const API = (
+  import.meta.env.VITE_API_URL || "http://localhost:5000"
+).replace(/\/$/, "");
 
 const Schemes = () => {
   const [schemes, setSchemes] = useState([]);
@@ -30,9 +30,16 @@ const Schemes = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // --------------------------------
+  // --------------------------------------------------
+  // API URL DEBUG
+  // --------------------------------------------------
+  useEffect(() => {
+    console.log("Scheme API:", `${API}/api/schemes`);
+  }, []);
+
+  // --------------------------------------------------
   // LOAD FILTERS
-  // --------------------------------
+  // --------------------------------------------------
   useEffect(() => {
     const loadFilters = async () => {
       try {
@@ -40,29 +47,35 @@ const Schemes = () => {
           `${API}/api/schemes/filters`
         );
 
+        if (!response.ok) {
+          throw new Error(
+            `Filter request failed: ${response.status}`
+          );
+        }
+
         const result = await response.json();
 
-        if (!response.ok || !result.success) {
+        console.log("Filters response:", result);
+
+        if (!result.success) {
           throw new Error(
             result.message || "Failed to load filters"
           );
         }
 
         setStates(result.data?.states || []);
-        setCategories(
-          result.data?.categories || []
-        );
-      } catch (error) {
-        console.error("Filter error:", error);
+        setCategories(result.data?.categories || []);
+      } catch (err) {
+        console.error("Filter loading error:", err);
       }
     };
 
     loadFilters();
   }, []);
 
-  // --------------------------------
+  // --------------------------------------------------
   // SEARCH DEBOUNCE
-  // --------------------------------
+  // --------------------------------------------------
   useEffect(() => {
     const timer = setTimeout(() => {
       setSearch(searchInput.trim());
@@ -72,9 +85,9 @@ const Schemes = () => {
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  // --------------------------------
+  // --------------------------------------------------
   // LOAD SCHEMES
-  // --------------------------------
+  // --------------------------------------------------
   useEffect(() => {
     const loadSchemes = async () => {
       try {
@@ -83,8 +96,8 @@ const Schemes = () => {
 
         const params = new URLSearchParams();
 
-        params.set("page", page);
-        params.set("limit", 24);
+        params.set("page", page.toString());
+        params.set("limit", "24");
 
         if (search) {
           params.set("search", search);
@@ -98,34 +111,53 @@ const Schemes = () => {
           params.set("category", category);
         }
 
-        const url =
-          `${API}/api/schemes?${params.toString()}`;
+        const url = `${API}/api/schemes?${params.toString()}`;
 
-        console.log("Fetching:", url);
+        console.log("Fetching schemes:", url);
 
         const response = await fetch(url);
 
-        const result = await response.json();
-
-        if (!response.ok || !result.success) {
+        if (!response.ok) {
           throw new Error(
-            result.message ||
-              "Failed to load schemes"
+            `Server returned ${response.status}`
           );
         }
 
-        setSchemes(result.data || []);
-        setTotal(result.total || 0);
-        setPages(result.pages || 1);
-      } catch (error) {
-        console.error(
-          "Scheme loading error:",
-          error
-        );
+        const result = await response.json();
+
+        console.log("Schemes response:", result);
+
+        if (!result.success) {
+          throw new Error(
+            result.message || "Failed to load schemes"
+          );
+        }
+
+        /*
+         * Expected backend response:
+         *
+         * {
+         *   success: true,
+         *   data: [...],
+         *   total: 2120,
+         *   pages: 89,
+         *   page: 1
+         * }
+         */
+
+        const schemeData = Array.isArray(result.data)
+          ? result.data
+          : [];
+
+        setSchemes(schemeData);
+        setTotal(Number(result.total) || 0);
+        setPages(Number(result.pages) || 1);
+      } catch (err) {
+        console.error("Scheme loading error:", err);
 
         setError(
-          error.message ||
-            "Unable to load schemes."
+          err.message ||
+            "Unable to load government schemes."
         );
 
         setSchemes([]);
@@ -139,16 +171,16 @@ const Schemes = () => {
     loadSchemes();
   }, [page, state, category, search]);
 
-  // --------------------------------
+  // --------------------------------------------------
   // HANDLERS
-  // --------------------------------
-  const handleState = (e) => {
-    setState(e.target.value);
+  // --------------------------------------------------
+  const handleStateChange = (event) => {
+    setState(event.target.value);
     setPage(1);
   };
 
-  const handleCategory = (e) => {
-    setCategory(e.target.value);
+  const handleCategoryChange = (event) => {
+    setCategory(event.target.value);
     setPage(1);
   };
 
@@ -158,6 +190,21 @@ const Schemes = () => {
     setPage(1);
   };
 
+  const handlePreviousPage = () => {
+    setPage((currentPage) =>
+      Math.max(1, currentPage - 1)
+    );
+  };
+
+  const handleNextPage = () => {
+    setPage((currentPage) =>
+      Math.min(pages, currentPage + 1)
+    );
+  };
+
+  // --------------------------------------------------
+  // RENDER
+  // --------------------------------------------------
   return (
     <div className="page-container">
 
@@ -168,24 +215,22 @@ const Schemes = () => {
         </h1>
 
         <p className="text-slate-400 mt-2">
-          Explore government schemes
-          across India.
+          Explore government schemes across India.
         </p>
 
-        <p className="text-emerald-400 text-sm mt-2">
-          {total.toLocaleString()} schemes
-          available
-        </p>
+        {!loading && (
+          <p className="text-emerald-400 text-sm mt-2">
+            {total.toLocaleString()} schemes available
+          </p>
+        )}
       </div>
 
       {/* FILTERS */}
       <div className="glass-card rounded-2xl p-4 mb-6">
-
         <div className="grid md:grid-cols-3 gap-3">
 
           {/* SEARCH */}
           <div className="relative">
-
             <Search
               className="
                 absolute
@@ -201,8 +246,8 @@ const Schemes = () => {
             <input
               type="text"
               value={searchInput}
-              onChange={(e) =>
-                setSearchInput(e.target.value)
+              onChange={(event) =>
+                setSearchInput(event.target.value)
               }
               placeholder="Search schemes..."
               className="
@@ -236,17 +281,17 @@ const Schemes = () => {
                   text-slate-500
                   hover:text-white
                 "
+                aria-label="Clear search"
               >
                 <X className="w-4 h-4" />
               </button>
             )}
-
           </div>
 
           {/* STATE */}
           <select
             value={state}
-            onChange={handleState}
+            onChange={handleStateChange}
             className="
               bg-slate-900
               border
@@ -265,10 +310,7 @@ const Schemes = () => {
             </option>
 
             {states.map((item) => (
-              <option
-                key={item}
-                value={item}
-              >
+              <option key={item} value={item}>
                 {item}
               </option>
             ))}
@@ -277,7 +319,7 @@ const Schemes = () => {
           {/* CATEGORY */}
           <select
             value={category}
-            onChange={handleCategory}
+            onChange={handleCategoryChange}
             className="
               bg-slate-900
               border
@@ -296,15 +338,11 @@ const Schemes = () => {
             </option>
 
             {categories.map((item) => (
-              <option
-                key={item}
-                value={item}
-              >
+              <option key={item} value={item}>
                 {item}
               </option>
             ))}
           </select>
-
         </div>
       </div>
 
@@ -314,48 +352,62 @@ const Schemes = () => {
           Search results for{" "}
           <span className="text-emerald-400 font-semibold">
             "{search}"
-          </span>
-          {" "}— {total.toLocaleString()} found
+          </span>{" "}
+          — {total.toLocaleString()} found
         </div>
       )}
 
       {/* ERROR */}
       {error && (
-        <div className="
-          mb-6
-          rounded-xl
-          border
-          border-red-500/20
-          bg-red-500/10
-          p-4
-          text-sm
-          text-red-300
-        ">
-          {error}
+        <div
+          className="
+            mb-6
+            rounded-xl
+            border
+            border-red-500/20
+            bg-red-500/10
+            p-4
+            text-sm
+            text-red-300
+          "
+        >
+          <p className="font-medium">
+            Unable to load schemes
+          </p>
+
+          <p className="mt-1 text-red-300/80">
+            {error}
+          </p>
         </div>
       )}
 
       {/* LOADING */}
       {loading ? (
-        <div className="flex justify-center py-20">
+        <div className="flex flex-col items-center justify-center py-20">
           <Loader2
             className="
-              w-7
-              h-7
+              w-8
+              h-8
               text-emerald-400
               animate-spin
             "
           />
+
+          <p className="text-sm text-slate-500 mt-3">
+            Loading government schemes...
+          </p>
         </div>
       ) : schemes.length === 0 ? (
 
         /* NO RESULTS */
-        <div className="
-          glass-card
-          rounded-2xl
-          p-10
-          text-center
-        ">
+        <div
+          className="
+            glass-card
+            rounded-2xl
+            p-10
+            text-center
+          "
+        >
           <Search
             className="
               w-10
@@ -371,13 +423,9 @@ const Schemes = () => {
           </p>
 
           {search && (
-            <p className="
-              text-xs
-              text-slate-500
-              mt-2
-            ">
-              Try another scheme name,
-              category or keyword.
+            <p className="text-xs text-slate-500 mt-2">
+              Try another scheme name, category,
+              or keyword.
             </p>
           )}
         </div>
@@ -386,212 +434,259 @@ const Schemes = () => {
 
         <>
           {/* SCHEME GRID */}
-          <div className="
-            grid
-            md:grid-cols-2
-            xl:grid-cols-3
-            gap-5
-          ">
+          <div
+            className="
+              grid
+              md:grid-cols-2
+              xl:grid-cols-3
+              gap-5
+            "
+          >
+            {schemes.map((scheme) => {
 
-            {schemes.map((scheme) => (
+              const schemeId =
+                scheme._id ||
+                scheme.id ||
+                scheme.slug ||
+                `${scheme.name}-${scheme.title}`;
 
-              <div
-                key={
-                  scheme._id ||
-                  scheme.slug
-                }
-                className="
-                  glass-card
-                  rounded-2xl
-                  p-5
-                  hover:border-emerald-500/40
-                  hover:-translate-y-0.5
-                  transition
-                "
-              >
+              const schemeName =
+                scheme.name ||
+                scheme.title ||
+                "Government Scheme";
 
-                {/* TOP */}
-                <div className="
-                  flex
-                  justify-between
-                  gap-3
-                ">
+              const schemeTitle =
+                scheme.title &&
+                scheme.title !== scheme.name
+                  ? scheme.title
+                  : null;
 
-                  <span className="
-                    px-2.5
-                    py-1
-                    rounded-lg
-                    bg-emerald-500/10
-                    text-emerald-400
-                    text-xs
-                  ">
-                    {scheme.category ||
-                      "General"}
-                  </span>
+              const description =
+                scheme.description ||
+                scheme.benefits ||
+                "Government welfare scheme.";
 
-                  <span className="
-                    text-xs
-                    text-slate-500
-                  ">
-                    {scheme.level ||
-                      "Government"}
-                  </span>
+              const location =
+                scheme.state ||
+                scheme.states ||
+                "All India";
 
-                </div>
+              const officialUrl =
+                scheme.officialUrl ||
+                scheme.official_url ||
+                scheme.applyUrl ||
+                scheme.apply_url ||
+                "";
 
-                {/* NAME */}
-                <h2 className="
-                  text-lg
-                  font-semibold
-                  text-white
-                  mt-4
-                ">
-                  {scheme.name ||
-                    scheme.title ||
-                    "Government Scheme"}
-                </h2>
+              return (
+                <div
+                  key={schemeId}
+                  className="
+                    glass-card
+                    rounded-2xl
+                    p-5
+                    border
+                    border-transparent
+                    hover:border-emerald-500/40
+                    hover:-translate-y-0.5
+                    transition
+                  "
+                >
 
-                {/* TITLE */}
-                {scheme.title &&
-                  scheme.title !==
-                    scheme.name && (
-
-                    <p className="
-                      text-sm
-                      text-slate-400
-                      mt-1
-                    ">
-                      {scheme.title}
-                    </p>
-
-                  )}
-
-                {/* DESCRIPTION */}
-                <p className="
-                  text-sm
-                  text-slate-500
-                  mt-3
-                  line-clamp-3
-                ">
-                  {scheme.description ||
-                    "Government welfare scheme."}
-                </p>
-
-                {/* BOTTOM */}
-                <div className="
-                  flex
-                  items-center
-                  justify-between
-                  gap-3
-                  mt-5
-                ">
-
-                  <span className="
-                    text-xs
-                    text-slate-500
-                  ">
-                    {scheme.state ||
-                      "All India"}
-                  </span>
-
-                  {scheme.officialUrl && (
-
-                    <a
-                      href={scheme.officialUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  {/* TOP */}
+                  <div
+                    className="
+                      flex
+                      items-start
+                      justify-between
+                      gap-3
+                    "
+                  >
+                    <span
                       className="
-                        inline-flex
-                        items-center
-                        gap-1.5
+                        px-2.5
+                        py-1
+                        rounded-lg
+                        bg-emerald-500/10
                         text-emerald-400
                         text-xs
-                        font-semibold
-                        hover:text-emerald-300
+                        font-medium
                       "
                     >
-                      Official Portal
+                      {scheme.category || "General"}
+                    </span>
 
-                      <ExternalLink
-                        className="w-3.5 h-3.5"
-                      />
-                    </a>
+                    <span
+                      className="
+                        text-xs
+                        text-slate-500
+                      "
+                    >
+                      {scheme.level || "Government"}
+                    </span>
+                  </div>
 
+                  {/* NAME */}
+                  <h2
+                    className="
+                      text-lg
+                      font-semibold
+                      text-white
+                      mt-4
+                      line-clamp-2
+                    "
+                  >
+                    {schemeName}
+                  </h2>
+
+                  {/* TITLE */}
+                  {schemeTitle && (
+                    <p
+                      className="
+                        text-sm
+                        text-slate-400
+                        mt-1
+                        line-clamp-2
+                      "
+                    >
+                      {schemeTitle}
+                    </p>
                   )}
 
+                  {/* DESCRIPTION */}
+                  <p
+                    className="
+                      text-sm
+                      text-slate-500
+                      mt-3
+                      line-clamp-3
+                    "
+                  >
+                    {description}
+                  </p>
+
+                  {/* BOTTOM */}
+                  <div
+                    className="
+                      flex
+                      items-center
+                      justify-between
+                      gap-3
+                      mt-5
+                    "
+                  >
+                    <span
+                      className="
+                        text-xs
+                        text-slate-500
+                        truncate
+                      "
+                      title={
+                        Array.isArray(location)
+                          ? location.join(", ")
+                          : location
+                      }
+                    >
+                      {Array.isArray(location)
+                        ? location.join(", ")
+                        : location}
+                    </span>
+
+                    {officialUrl && (
+                      <a
+                        href={officialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
+                          inline-flex
+                          items-center
+                          gap-1.5
+                          text-emerald-400
+                          text-xs
+                          font-semibold
+                          whitespace-nowrap
+                          hover:text-emerald-300
+                        "
+                      >
+                        Official Portal
+
+                        <ExternalLink
+                          className="w-3.5 h-3.5"
+                        />
+                      </a>
+                    )}
+                  </div>
                 </div>
-
-              </div>
-
-            ))}
-
+              );
+            })}
           </div>
 
           {/* PAGINATION */}
-          <div className="
-            flex
-            items-center
-            justify-center
-            gap-4
-            mt-8
-            pb-8
-          ">
-
-            <button
-              disabled={page <= 1}
-              onClick={() =>
-                setPage((p) => p - 1)
-              }
+          {pages > 1 && (
+            <div
               className="
-                p-2
-                rounded-lg
-                bg-slate-800
-                border
-                border-slate-700
-                text-slate-300
-                hover:bg-slate-700
-                disabled:opacity-30
-                disabled:cursor-not-allowed
+                flex
+                items-center
+                justify-center
+                gap-4
+                mt-8
+                pb-8
               "
             >
-              <ChevronLeft
-                className="w-5 h-5"
-              />
-            </button>
+              <button
+                type="button"
+                disabled={page <= 1}
+                onClick={handlePreviousPage}
+                className="
+                  p-2
+                  rounded-lg
+                  bg-slate-800
+                  border
+                  border-slate-700
+                  text-slate-300
+                  hover:bg-slate-700
+                  disabled:opacity-30
+                  disabled:cursor-not-allowed
+                "
+                aria-label="Previous page"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
 
-            <span className="
-              text-sm
-              text-slate-400
-            ">
-              Page {page} of {pages}
-            </span>
+              <span
+                className="
+                  text-sm
+                  text-slate-400
+                  min-w-[100px]
+                  text-center
+                "
+              >
+                Page {page} of {pages}
+              </span>
 
-            <button
-              disabled={page >= pages}
-              onClick={() =>
-                setPage((p) => p + 1)
-              }
-              className="
-                p-2
-                rounded-lg
-                bg-slate-800
-                border
-                border-slate-700
-                text-slate-300
-                hover:bg-slate-700
-                disabled:opacity-30
-                disabled:cursor-not-allowed
-              "
-            >
-              <ChevronRight
-                className="w-5 h-5"
-              />
-            </button>
-
-          </div>
+              <button
+                type="button"
+                disabled={page >= pages}
+                onClick={handleNextPage}
+                className="
+                  p-2
+                  rounded-lg
+                  bg-slate-800
+                  border
+                  border-slate-700
+                  text-slate-300
+                  hover:bg-slate-700
+                  disabled:opacity-30
+                  disabled:cursor-not-allowed
+                "
+                aria-label="Next page"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          )}
         </>
       )}
-
     </div>
   );
 };
