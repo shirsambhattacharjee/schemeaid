@@ -406,22 +406,22 @@ Example:
 ## 📸 Screenshots
 
 ### Dashboard
-![Dashboard](./screenshots/dashboard.png)
+![Dashboard](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/dashboard.png)
 
 ### Eligibility Checker
-![Eligibility Checker](./screenshots/eligibility.png)
+![Eligibility Checker](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/eligibility.png)
 
 ### Schemes
-![Scheme Results](./screenshots/schemes.png)
+![Scheme Results](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/schemes.png)
 
 ### AI Assistant
-![AI Assistant](./screenshots/ai-assistant.png)
+![AI Assistant](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/ai-assistant.png)
 
 ### Login
-![Login](./screenshots/login.png)
+![Login](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/login.png)
 
 ### Profile
-![Profile](./screenshots/profile.png)
+![Profile](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/profile.png)
 ```
 
 ## 🎯 Project Goals
