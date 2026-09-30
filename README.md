@@ -406,22 +406,22 @@ Example:
 ## 📸 Screenshots
 
 ### Dashboard
-![Dashboard](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/dashboard.png)
+![Dashboard](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/dashboard.png)
 
 ### Eligibility Checker
-![Eligibility Checker](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/eligibility.png)
+![Eligibility Checker](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/eligibility.png)
 
 ### Schemes
-![Scheme Results](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/schemes.png)
+![Scheme Results](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/schemes.png)
 
 ### AI Assistant
-![AI Assistant](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/ai-assistant.png)
+![AI Assistant](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/ai-assistant.png)
 
 ### Login
-![Login](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/login.png)
+![Login](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/login.png)
 
 ### Profile
-![Profile](https://raw.githubusercontent.com/shirsambhattacharjee/gov-scheme-assistant/main/screenshots/profile.png)
+![Profile](https://raw.githubusercontent.com/shirsambhattacharjee/schemeaid/main/screenshots/profile.png)
 ```
 
 ## 🎯 Project Goals
