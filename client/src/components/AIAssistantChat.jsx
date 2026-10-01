@@ -220,12 +220,13 @@ const AIAssistantChat = () => {
           className="
             w-80 md:w-96
             h-[520px]
-            bg-slate-900
-            border border-slate-800
+            bg-white dark:bg-slate-900
+            border border-slate-200 dark:border-slate-800
             rounded-2xl
             shadow-2xl
             flex flex-col
             overflow-hidden
+            transition-colors
           "
         >
 
@@ -233,8 +234,8 @@ const AIAssistantChat = () => {
           <div
             className="
               p-4
-              bg-slate-800/90
-              border-b border-slate-700
+              bg-slate-100/90 dark:bg-slate-800/90
+              border-b border-slate-200 dark:border-slate-700
               flex justify-between items-center
             "
           >
@@ -247,7 +248,7 @@ const AIAssistantChat = () => {
                   bg-emerald-500/10
                   border border-emerald-500/20
                   flex items-center justify-center
-                  text-emerald-400
+                  text-emerald-600 dark:text-emerald-400
                 "
               >
                 <Bot className="w-5 h-5" />
@@ -255,16 +256,16 @@ const AIAssistantChat = () => {
 
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-white font-semibold text-sm">
+                  <span className="text-slate-900 dark:text-white font-semibold text-sm">
                     AI Assistant
                   </span>
 
                   <Sparkles
-                    className="w-3.5 h-3.5 text-emerald-400"
+                    className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400"
                   />
                 </div>
 
-                <p className="text-[10px] text-slate-400">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400">
                   SchemeAid Assistant
                 </p>
               </div>
@@ -277,9 +278,8 @@ const AIAssistantChat = () => {
               className="
                 p-1.5
                 rounded-lg
-                text-slate-400
-                hover:text-white
-                hover:bg-slate-700
+                text-slate-500 hover:text-slate-900 hover:bg-slate-200
+                dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-700
                 transition-colors
               "
               aria-label="Close assistant"
@@ -310,7 +310,7 @@ const AIAssistantChat = () => {
                   className={`max-w-[88%] p-3 rounded-xl text-sm leading-relaxed ${
                     message.role === "user"
                       ? "bg-emerald-500 text-slate-950 font-medium rounded-br-sm"
-                      : "bg-slate-800 text-slate-200 rounded-bl-sm"
+                      : "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 rounded-bl-sm"
                   }`}
                 >
                   {message.role === "user" ? (
@@ -319,14 +319,15 @@ const AIAssistantChat = () => {
                     <div
                       className="
                         prose
-                        prose-invert
+                        dark:prose-invert
                         text-sm
                         max-w-none
                         prose-p:my-1
                         prose-ul:my-1
                         prose-ol:my-1
                         prose-li:my-0.5
-                        prose-headings:text-emerald-400
+                        prose-headings:text-emerald-600
+                        dark:prose-headings:text-emerald-400
                         prose-headings:my-2
                       "
                     >
@@ -344,8 +345,8 @@ const AIAssistantChat = () => {
               <div className="flex justify-start">
                 <div
                   className="
-                    bg-slate-800
-                    text-slate-400
+                    bg-slate-100 dark:bg-slate-800
+                    text-slate-600 dark:text-slate-400
                     rounded-xl
                     px-3 py-2.5
                     text-xs
@@ -365,8 +366,9 @@ const AIAssistantChat = () => {
             onSubmit={handleSend}
             className="
               p-3
-              border-t border-slate-800
+              border-t border-slate-200 dark:border-slate-800
               flex gap-2
+              bg-white dark:bg-slate-900
             "
           >
             <input
@@ -379,13 +381,13 @@ const AIAssistantChat = () => {
               disabled={loading}
               className="
                 flex-1
-                bg-slate-800
-                border border-slate-700
+                bg-slate-100 dark:bg-slate-800
+                border border-slate-300 dark:border-slate-700
                 rounded-xl
                 px-3 py-2.5
                 text-sm
-                text-slate-200
-                placeholder:text-slate-500
+                text-slate-900 dark:text-slate-200
+                placeholder:text-slate-400 dark:placeholder:text-slate-500
                 focus:outline-none
                 focus:border-emerald-500
                 disabled:opacity-50

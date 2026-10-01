@@ -7,39 +7,27 @@ import {
   Menu,
 } from "lucide-react";
 
-const Header = () => {
+const Header = ({ onMenuClick }) => {
   const { currentUser, logout } = useAuth();
 
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") || "dark";
   });
 
-  
   const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
-    document.documentElement.setAttribute(
-      "data-theme",
-      theme
-    );
-
-    document.body.setAttribute(
-      "data-theme",
-      theme
-    );
-
+    document.documentElement.setAttribute("data-theme", theme);
+    document.body.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  
   useEffect(() => {
     setImgError(false);
   }, [currentUser?.photoURL]);
 
   const toggleTheme = () => {
-    setTheme((current) =>
-      current === "dark" ? "light" : "dark"
-    );
+    setTheme((current) => (current === "dark" ? "light" : "dark"));
   };
 
   const name =
@@ -47,15 +35,20 @@ const Header = () => {
     currentUser?.email?.split("@")[0] ||
     "User";
 
-  const firstLetter = name
-    .charAt(0)
-    .toUpperCase();
+  const firstLetter = name.charAt(0).toUpperCase();
 
   return (
     <header className="top-header">
-
       <div className="mobile-brand">
-        <button className="mobile-menu">
+        <button 
+          type="button"
+          className="mobile-menu" 
+          onClick={() => {
+            console.log("Hamburger clicked!");
+            if (onMenuClick) onMenuClick();
+          }} 
+          aria-label="Open menu"
+        >
           <Menu size={19} />
         </button>
 
@@ -63,44 +56,30 @@ const Header = () => {
       </div>
 
       <div className="header-right">
-
         {/* THEME SWITCH */}
         <button
           type="button"
           onClick={toggleTheme}
           className="theme-switch"
           aria-label="Toggle light and dark mode"
-          title={
-            theme === "dark"
-              ? "Switch to light mode"
-              : "Switch to dark mode"
-          }
+          title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
         >
           <span
             className={`theme-switch-thumb ${
-              theme === "light"
-                ? "theme-light"
-                : ""
+              theme === "light" ? "theme-light" : ""
             }`}
           >
-            {theme === "dark" ? (
-              <Moon size={14} />
-            ) : (
-              <Sun size={14} />
-            )}
+            {theme === "dark" ? <Moon size={14} /> : <Sun size={14} />}
           </span>
 
           <span className="theme-label">
-            {theme === "dark"
-              ? "Dark"
-              : "Light"}
+            {theme === "dark" ? "Dark" : "Light"}
           </span>
         </button>
 
         {/* PROFILE */}
         {currentUser && (
           <div className="header-profile">
-
             {currentUser.photoURL && !imgError ? (
               <img
                 src={currentUser.photoURL}
@@ -115,13 +94,8 @@ const Header = () => {
             )}
 
             <div className="header-user-info">
-              <span className="header-welcome">
-                Welcome back
-              </span>
-
-              <span className="header-name">
-                {name}
-              </span>
+              <span className="header-welcome">Welcome back</span>
+              <span className="header-name">{name}</span>
             </div>
 
             <button
@@ -132,10 +106,8 @@ const Header = () => {
             >
               <LogOut size={16} />
             </button>
-
           </div>
         )}
-
       </div>
     </header>
   );

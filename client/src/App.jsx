@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -14,19 +15,25 @@ import Schemes from "./pages/Schemes";
 import SchemeDetails from "./pages/SchemeDetails";
 import SavedSchemes from "./pages/SavedSchemes";
 import MyApplications from "./pages/MyApplications";
-
 import SchemesPage from "./pages/SchemesPage";
 
 import "./App.css";
 
 const ProtectedLayout = ({ children }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <ProtectedRoute>
       <div className="app-shell">
-        <Sidebar />
+        <Sidebar 
+          isOpen={sidebarOpen} 
+          onClose={() => setSidebarOpen(false)} 
+        />
 
         <div className="app-main">
-          <Header />
+          <Header 
+            onMenuClick={() => setSidebarOpen(true)} 
+          />
 
           <main className="app-content">
             {children}
@@ -109,21 +116,8 @@ function App() {
             }
           />
 
-          <Route
-            path="/schemes"
-            element={
-              <ProtectedLayout>
-                <SchemesPage />
-              </ProtectedLayout>
-            }
-          />
-
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-
-          <Route
-            path="*"
-            element={<Navigate to="/dashboard" replace />}
-          />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
